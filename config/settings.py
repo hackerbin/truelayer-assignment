@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +31,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-xijqv4z^a5xl$%7afyw^me$)f8z92!x)1&t^9-e5tpm^@1sz=u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '3.0.99.210']
 
 # Application definition
 
@@ -115,12 +123,77 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfile")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
 # http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# LOGS
+# logs
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(module)s %(message)s'
+        },
+        'basic': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
+    },
+    'handlers': {
+        'console': {
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'basic'
+        },
+        'debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'log/debug.log',
+            'formatter': 'verbose',
+        },
+        'error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'log/error.log',
+            'formatter': 'verbose',
+        },
+        'info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'log/error.log',
+            'formatter': 'verbose',
+        },
+        'warning': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'log/warning.log',
+            'formatter': 'verbose',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'info'],
+            'propagate': True,
+        },
+        'accounts': {
+            'level': 'DEBUG',
+            'handlers': ['debug'],
+        }
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -130,8 +203,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # TRUE_LAYER_CONFIG
 TRUELAYER_BASE = 'https://auth.truelayer-sandbox.com'
 TRUELAYER_RESPONSE_TYPE = 'code'
-TRUELAYER_CLIENT_ID = 'sandbox-consequence-fd977d'
-TRUELAYER_CLIENT_SECRET = '7b03202d-e961-4e77-ac45-8b88ba4031db'
+TRUELAYER_CLIENT_ID = env('TRUELAYER_CLIENT_ID')
+TRUELAYER_CLIENT_SECRET = env('TRUELAYER_CLIENT_SECRET')
 TRUELAYER_SCOPE = 'info accounts balance cards transactions direct_debits standing_orders offline_access'
-TRUELAYER_REDIRECT_URI = 'http://localhost:8000/callback'
+TRUELAYER_REDIRECT_URI = env('TRUELAYER_REDIRECT_URI')
 TRUELAYER_PROVIDERS = 'uk-ob-all uk-oauth-all uk-cs-mock'
