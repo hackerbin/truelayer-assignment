@@ -9,4 +9,11 @@
 5. Run migration command -> `./manage.py migrate`
 6. Run the project -> `./manage.py runserver`
 
+
+## Server commands
+1. gunicorn service is running as system daemon
+2. `sudo systemctl restart/status/start/stop tla`
+3. here `tla` is my service name. 
+4. You can find the service file in `/etc/systemd/system/tla.service`
+
 Have fun, Happy coding!
