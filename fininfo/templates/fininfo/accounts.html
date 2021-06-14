@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_css %}
+    <style>
+
+    </style>
+{% endblock %}
+
+
+{% block sidebar %}
+    {% include 'includes/sidebar.html' %}
+{% endblock sidebar %}
+{% block content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Accounts</h1>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">List of accounts</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Display Name</th>
+                            <th>Account Number</th>
+                            <th>Accunt Id</th>
+                            <th>Provider</th>
+                            <th>Provider Logo</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for account in accounts %}
+                            <tr>
+                                <td>{{ account.display_name }}</td>
+                                <td>{{ account.account_number }}</td>
+                                <td>{{ account.account_id }}</td>
+                                <td>{{ account.provider.display_name }}</td>
+                                <td><img width="50" src="{{ account.provider.logo_uri }}" alt=""></td>
+                                <td>
+                                    <a href="{% url 'account_transactions' account.account_id %}" class="btn btn-xs btn-success mr-1">Show
+                                        Transactions
+                                    </a>
+                                    <button onclick="showDetails({{ account | safe }})"
+                                            class="btn btn-xs btn-info mr-1">Show account details
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock content %}
+{% block page_js %}
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'js/extra.js' %}"></script>
+{% endblock %}

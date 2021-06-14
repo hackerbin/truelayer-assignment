@@ -16,6 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from fininfo.views import SignInView, Callback, Accounts, Cards, AccountTransactions, CardTransactions
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', SignInView.as_view(), name='root'),
+    path('signin/', SignInView.as_view(), name='signin'),
+    path('callback/', Callback.as_view(), name='callback'),
+    path('accounts/', Accounts.as_view(), name='accounts'),
+    path('account-transactions/<str:account_id>/', AccountTransactions.as_view(), name='account_transactions'),
+    path('cards/', Cards.as_view(), name='cards'),
+    path('card-transactions/<str:account_id>/', CardTransactions.as_view(), name='card_transactions'),
 ]

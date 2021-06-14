@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_css %}
+    <style>
+        .connect-bank-button {
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid m-5 text-center">
+        <a class="connect-bank-button btn btn-info" href="{{ auth_url }}">Connect your bank</a>
+    </div>
+
+{% endblock content %}
+{% block page_js %}
+
+{% endblock %}
