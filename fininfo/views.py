@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateResponseMixin
 
 from fininfo.constants import ACCESS_TOKEN_SESSION_KEY
 from fininfo.truelayer import TrueLayer
-from fininfo.utils import generate_truelayer_auth_uri
+from fininfo.utils import generate_truelayer_auth_uri, write_log
 
 
 class SignInView(View, TemplateResponseMixin):
@@ -25,8 +25,15 @@ class Callback(View, TemplateResponseMixin):
 
     def get(self, request):
         code = request.GET.get('code', None)
+
+        # Debug purpose only
+        write_log(file_name='code', log_obj={'code': code, 'path': '/callback'})
+
         truelayer = TrueLayer()
         access_token = truelayer.get_access_token(code)
+        # Debug purpose only
+        write_log(file_name='code_and_token',
+                  log_obj={'code': code, 'access_token': access_token if access_token else '', 'path': '/callback'})
 
         request.session[ACCESS_TOKEN_SESSION_KEY] = access_token
         if not access_token:
@@ -41,6 +48,10 @@ class Accounts(View, TemplateResponseMixin):
 
     def get(self, request):
         access_token = request.session.get(ACCESS_TOKEN_SESSION_KEY, None)
+
+        # Debug purpose only
+        write_log(file_name='code_and_token',
+                  log_obj={'access_token': access_token if access_token else '', 'path': '/accounts'})
         if not access_token:
             return redirect(reverse('signin'))
 
