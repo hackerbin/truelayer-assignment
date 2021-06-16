@@ -1,7 +1,8 @@
 import json
 
 import requests
-from config.settings import TRUELAYER_BASE, TRUELAYER_RESPONSE_TYPE, TRUELAYER_CLIENT_ID, TRUELAYER_CLIENT_SECRET, \
+from config.settings import TRUELAYER_AUTH_BASE, TRUELAYER_API_BASE, TRUELAYER_RESPONSE_TYPE, TRUELAYER_CLIENT_ID, \
+    TRUELAYER_CLIENT_SECRET, \
     TRUELAYER_SCOPE, \
     TRUELAYER_REDIRECT_URI, TRUELAYER_PROVIDERS
 
@@ -10,7 +11,7 @@ class TrueLayer:
     access_token = None
 
     def get_access_token(self, code):
-        url = f"{TRUELAYER_BASE}/connect/token"
+        url = f"{TRUELAYER_AUTH_BASE}/connect/token"
 
         payload = f'grant_type=authorization_code&client_id={TRUELAYER_CLIENT_ID}&client_secret={TRUELAYER_CLIENT_SECRET}&redirect_uri={TRUELAYER_REDIRECT_URI}&code={code}'
         headers = {
@@ -29,7 +30,7 @@ class TrueLayer:
         return
 
     def list_all_accounts(self):
-        url = "https://api.truelayer-sandbox.com/data/v1/accounts"
+        url = f"{TRUELAYER_API_BASE}/data/v1/accounts"
 
         payload = {}
         headers = {
@@ -43,7 +44,7 @@ class TrueLayer:
         return {}
 
     def retrieve_account_transactions(self, account_id):
-        url = f"https://api.truelayer-sandbox.com/data/v1/accounts/{account_id}/transactions"
+        url = f"{TRUELAYER_API_BASE}/data/v1/accounts/{account_id}/transactions"
 
         payload = {}
         headers = {
@@ -57,7 +58,7 @@ class TrueLayer:
         return {}
 
     def retrieve_account_pending_transactions(self, account_id):
-        url = f"https://api.truelayer-sandbox.com/data/v1/accounts/{account_id}/transactions/pending"
+        url = f"{TRUELAYER_API_BASE}/data/v1/accounts/{account_id}/transactions/pending"
 
         payload = {}
         headers = {
@@ -71,7 +72,7 @@ class TrueLayer:
         return {}
 
     def list_all_cards(self):
-        url = "https://api.truelayer-sandbox.com/data/v1/cards"
+        url = f"{TRUELAYER_API_BASE}/data/v1/cards"
 
         payload = {}
         headers = {
@@ -85,7 +86,7 @@ class TrueLayer:
         return {}
 
     def retrieve_card_transactions(self, account_id):
-        url = f"https://api.truelayer-sandbox.com/data/v1/cards/{account_id}/transactions"
+        url = f"{TRUELAYER_API_BASE}/data/v1/cards/{account_id}/transactions"
 
         payload = {}
         headers = {
